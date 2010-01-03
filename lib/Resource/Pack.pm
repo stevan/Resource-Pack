@@ -29,8 +29,9 @@ role {
 
     my @dep_objects = map { $_->new } @$deps;
 
-    # make a constant method since it won't change
-    method 'dependencies' => sub { @dep_objects };
+    # make these constant methods since they won't change
+    method 'dependencies'   => sub { @dep_objects };
+    method 'applied_traits' => sub { @$traits     };
 
     # apply all our traits ...
     with @$traits if @$traits;

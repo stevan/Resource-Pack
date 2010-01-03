@@ -21,4 +21,7 @@ BEGIN {
 my $pack = My::Pack->new;
 does_ok($pack, 'Resource::Pack');
 
+is_deeply([ $pack->applied_traits ], [], '... no traits applied');
+is_deeply([ $pack->dependencies   ], [], '... no dependencies');
+
 done_testing;

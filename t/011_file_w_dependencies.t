@@ -24,6 +24,10 @@ my $dest       = dir('.');
 my $target     = $dest->file( 'Pack.txt' );
 my $target_dep = $dest->file( 'PackDep.txt' );
 
+# clear stuff out before we start the test
+$target->remove     if -e $target;
+$target_dep->remove if -e $target_dep;
+
 ok(! -e $target,     '... the file does not exist yet');
 ok(! -e $target_dep, '... the dep file does not exist yet');
 

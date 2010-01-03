@@ -4,7 +4,7 @@ use MooseX::Params::Validate;
 use MooseX::Types::Path::Class;
 
 use Digest::MD5;
-use File::Copy  ();
+use File::Copy ();
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';

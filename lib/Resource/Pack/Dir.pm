@@ -3,9 +3,8 @@ use Moose::Role;
 use MooseX::Params::Validate;
 use MooseX::Types::Path::Class;
 
-use Class::Inspector;
-use File::Copy  ();
-use Path::Class ();
+use Digest::MD5;
+use File::Copy ();
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -40,8 +39,18 @@ sub copy {
         }
         else {
             my $target = $to->file( $child->basename );
+
+            my $should_copy = 1;
+
+            if ($checksum && -e $target) {
+                $should_copy = 0
+                    if Digest::MD5->new->addfile( $target->openr )->hexdigest
+                    eq Digest::MD5->new->addfile( $child->openr )->hexdigest;
+            }
+
             File::Copy::copy( $child->stringify, $target->stringify  )
-                || confess "Could not copy " . $child , " to $target because: $!";
+                || confess "Could not copy " . $child , " to $target because: $!"
+                    if $should_copy;
         }
     }
 

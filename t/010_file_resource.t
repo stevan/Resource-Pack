@@ -30,6 +30,8 @@ is($pack->file->slurp, 'Test010::Pack', '... got the contents of the file');
 my $dest   = dir('.');
 my $target = $dest->file( 'Pack.txt' );
 
+$target->remove if -e $target; # clear stuff out before we start the test
+
 ok(! -e $target, '... the file does not exist yet');
 
 lives_ok {

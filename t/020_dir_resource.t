@@ -26,6 +26,9 @@ my @targets = (
     $dest->file( 'test.css' )
 );
 
+# clear stuff out before we start the test
+-e $_ && $_->remove for @targets;
+
 ok(! -e $_,     '... the file (' . $_ . ') does not exist yet') for @targets;
 
 lives_ok {
