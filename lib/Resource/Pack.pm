@@ -4,13 +4,16 @@ use MooseX::Role::Parameterized;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
+use Resource::Pack::Types;
+
 parameter 'depends_on' => (
-    isa     => 'ArrayRef[ Str | ClassName ]',
+    isa     => 'Resource::Pack::Dependencies',
+    coerce  => 1,
     default => sub { [] }
 );
 
 parameter 'traits' => (
-    isa     => 'ArrayRef',
+    isa     => 'Resource::Pack::Traits',
     default => sub { [] }
 );
 
@@ -19,19 +22,9 @@ role {
     my $traits = $p->traits;
     my $deps   = $p->depends_on;
 
-    # load all our classes
-    Class::MOP::load_class( $_ ) foreach @$deps;
-
-    # check all our dependencies at compile time ;)
-    $_->does('Resource::Pack')
-        || confess "Dependent modules must also do the Resource::Pack role"
-            foreach @$deps;
-
-    my @dep_objects = map { $_->new } @$deps;
-
     # make these constant methods since they won't change
-    method 'dependencies'   => sub { @dep_objects };
-    method 'applied_traits' => sub { @$traits     };
+    method 'dependencies'   => sub { @$deps   };
+    method 'applied_traits' => sub { @$traits };
 
     # apply all our traits ...
     with @$traits if @$traits;

@@ -11,7 +11,23 @@ use Test::Exception;
 use Test::Moose;
 
 BEGIN {
-    use_ok('Test002::Pack');
+    use_ok('Resource::Pack');
+}
+
+{
+    package Test002::Dependency::Pack;
+    use Moose;
+
+    with 'Resource::Pack';
+
+    package Test002::Pack;
+    use Moose;
+
+    with 'Resource::Pack' => {
+        depends_on => [
+            'Test002::Dependency::Pack'
+        ]
+    };
 }
 
 my $pack = Test002::Pack->new;

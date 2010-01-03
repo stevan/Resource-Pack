@@ -1,13 +1,14 @@
 package Resource::Pack::Dir;
 use Moose::Role;
 use MooseX::Params::Validate;
-use MooseX::Types::Path::Class;
 
 use Digest::MD5;
 use File::Copy ();
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
+
+use Resource::Pack::Types;
 
 with 'Resource::Pack::Core';
 
@@ -17,7 +18,7 @@ has 'dir' => (
     lazy     => 1,
     default  => sub {
         my $self = shift;
-        $self->locate_class_file->parent->subdir(
+        $self->class_file->parent->subdir(
              $self->local_class_name
         )
     }

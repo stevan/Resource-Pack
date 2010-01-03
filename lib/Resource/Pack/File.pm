@@ -1,13 +1,14 @@
 package Resource::Pack::File;
 use MooseX::Role::Parameterized;
 use MooseX::Params::Validate;
-use MooseX::Types::Path::Class;
 
 use Digest::MD5;
 use File::Copy ();
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
+
+use Resource::Pack::Types;
 
 parameter 'extension' => (
     isa      => 'Str',
@@ -25,7 +26,7 @@ role {
         lazy     => 1,
         default  => sub {
             my $self = shift;
-            $self->locate_class_file->parent->file(
+            $self->class_file->parent->file(
                  $self->local_class_name
                  . '.'
                  . $ext

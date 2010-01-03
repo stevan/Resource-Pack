@@ -7,23 +7,37 @@ use Path::Class ();
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
+use Resource::Pack::Types;
+
 requires 'dependencies';
 
-sub fully_qualified_class_name { (shift)->meta->name }
+has 'fully_qualified_class_name' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => sub { (shift)->meta->name },
+);
 
-sub local_class_name {
-    my $self = shift;
-    ( split /\:\:/ => $self->fully_qualified_class_name )[-1]
-}
+has 'local_class_name' => (
+    is      => 'ro',
+    isa     => 'Str',
+    lazy    => 1,
+    default => sub {
+        ( split /\:\:/ => (shift)->fully_qualified_class_name )[-1]
+    },
+);
 
-sub locate_class_file {
-    my $self = shift;
-    Path::Class::File->new(
-        Class::Inspector->loaded_filename(
-            $self->fully_qualified_class_name
+has 'class_file' => (
+    is      => 'ro',
+    isa     => 'Path::Class::File',
+    lazy    => 1,
+    default => sub {
+        Path::Class::File->new(
+            Class::Inspector->loaded_filename(
+                (shift)->fully_qualified_class_name
+            )
         )
-    )
-}
+    },
+);
 
 no Moose::Role; 1;
 
