@@ -11,12 +11,12 @@ our $AUTHORITY = 'cpan:STEVAN';
 use Resource::Pack::Types;
 
 parameter 'extension' => (
-    isa      => 'Str',
-    required => 1,
+    isa     => 'Str',
+    default => 'txt'
 );
 
 role {
-    my $ext  = (shift)->extension;
+    my $ext = (shift)->extension;
 
     with 'Resource::Pack::Core';
 
@@ -29,7 +29,7 @@ role {
             $self->class_file->parent->file(
                  $self->local_class_name
                  . '.'
-                 . $ext
+                 . $self->extension
             )
         }
     );

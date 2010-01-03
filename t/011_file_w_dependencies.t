@@ -21,8 +21,8 @@ does_ok($pack, 'Resource::Pack::File');
 # copy the file ...
 
 my $dest       = dir('.');
-my $target     = $dest->file( 'Pack.txt' );
-my $target_dep = $dest->file( 'PackDep.txt' );
+my $target     = $dest->file( 'Pack.js' );
+my $target_dep = $dest->file( 'PackDep.js' );
 
 # clear stuff out before we start the test
 $target->remove     if -e $target;

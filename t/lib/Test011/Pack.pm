@@ -6,7 +6,7 @@ with 'Resource::Pack' => {
         'Test011::Dependency::PackDep'
     ],
     traits => [
-        'Resource::Pack::File' => { extension => 'txt' }
+        'Resource::Pack::File' => { extension => 'js' }
     ]
 };
 

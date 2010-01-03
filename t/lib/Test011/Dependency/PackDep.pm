@@ -3,7 +3,7 @@ use Moose;
 
 with 'Resource::Pack' => {
     traits => [
-        'Resource::Pack::File' => { extension => 'txt' }
+        'Resource::Pack::File' => { extension => 'js' }
     ]
 };
 
