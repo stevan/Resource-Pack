@@ -5,8 +5,8 @@ use MooseX::Types::Path::Class;
 
 use Digest::MD5;
 use Class::Inspector;
-use Path::Class 'file';
-use File::Copy  'copy';
+use File::Copy  ();
+use Path::Class ();
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
@@ -19,7 +19,7 @@ parameter 'extension' => (
 );
 
 role {
-    my $ext = (shift)->extension;
+    my $ext  = (shift)->extension;
 
     has 'file' => (
         is       => 'ro',
@@ -27,16 +27,18 @@ role {
         lazy     => 1,
         default  => sub {
             my $class = (shift)->meta->name;
-            file( Class::Inspector->loaded_filename( $class ) )
-                ->parent
-                ->file(  (split /\:\:/ => $class)[-1] . '.' . $ext)
+            Path::Class::File->new(
+                Class::Inspector->loaded_filename( $class )
+            )->parent->file(
+                (split /\:\:/ => $class)[-1] . '.' . $ext
+            )
         }
     );
 
     method 'extension' => sub { $ext };
 };
 
-sub copy_file {
+sub copy {
     my ($self, $to, $include_dependencies, $checksum) = validated_list(\@_,
         to           => { isa => 'Path::Class::Dir', coerce => 1 },
         include_deps => { isa => 'Bool', optional => 1 },
@@ -53,21 +55,16 @@ sub copy_file {
             eq Digest::MD5->new->addfile( $self->file->openr )->hexdigest;
     }
 
-    copy( $self->file->stringify, $target->stringify )
+    File::Copy::copy( $self->file->stringify, $target->stringify )
         || confess "Could not copy " . $self->file->basename , " to $target because: $!"
             if $should_copy;
 
     if ( $include_dependencies ) {
-        $_->copy_file(
+        $_->copy(
             to           => $to,
             include_deps => 1,
             (defined $checksum ? (checksum => $checksum) : ()),
-        ) foreach grep {
-            # FIXME:
-            # I am not sure about this here ...
-            # - SL
-            ! $_->does('Resource::Pack::File')
-        } $self->dependencies;
+        ) foreach $self->dependencies;
     }
 }
 

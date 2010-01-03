@@ -4,7 +4,7 @@ use Moose::Role;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-#requires 'dependencies';
+requires 'dependencies';
 
 no Moose::Role; 1;
 

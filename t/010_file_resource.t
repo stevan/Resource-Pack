@@ -33,7 +33,7 @@ my $target = $dest->file( 'Pack.txt' );
 ok(! -e $target, '... the file does not exist yet');
 
 lives_ok {
-    $pack->copy_file( to => $dest );
+    $pack->copy( to => $dest );
 } '... file was copied successfully';
 
 ok( -e $target, '... the file does exist now');
@@ -48,7 +48,7 @@ sleep(1);
 # see if it will copy ...
 
 lives_ok {
-    $pack->copy_file( to => $dest, checksum => 1 );
+    $pack->copy( to => $dest, checksum => 1 );
 } '... file was not copied (because the checksum showed it had not changed)';
 
 is($target->stat->mtime, $mod_time, '... the modification time has not been changed');
@@ -66,7 +66,7 @@ $mod_time = $target->stat->mtime;
 sleep(1);
 
 lives_ok {
-    $pack->copy_file( to => $dest, checksum => 1 );
+    $pack->copy( to => $dest, checksum => 1 );
 } '... file was copied successfully (because the checksum showed it had changed)';
 
 is($pack->file->slurp, $target->slurp, '... the contents of the file are the same (again)');
@@ -90,7 +90,7 @@ $mod_time = $target->stat->mtime;
 sleep(1);
 
 lives_ok {
-    $pack->copy_file( to => $dest, checksum => 1 );
+    $pack->copy( to => $dest, checksum => 1 );
 } '... file was not copied (because the checksum showed it had not changed)';
 
 is($target->stat->mtime, $mod_time, '... the modification time has not been changed');
