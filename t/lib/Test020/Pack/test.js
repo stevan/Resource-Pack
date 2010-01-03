@@ -1,0 +1,1 @@
+function hello () { alert("I AM JAVASCRIPT") }

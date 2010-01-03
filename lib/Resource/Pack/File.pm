@@ -4,14 +4,10 @@ use MooseX::Params::Validate;
 use MooseX::Types::Path::Class;
 
 use Digest::MD5;
-use Class::Inspector;
 use File::Copy  ();
-use Path::Class ();
 
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
-
-with 'Resource::Pack::Core';
 
 parameter 'extension' => (
     isa      => 'Str',
@@ -21,16 +17,18 @@ parameter 'extension' => (
 role {
     my $ext  = (shift)->extension;
 
+    with 'Resource::Pack::Core';
+
     has 'file' => (
         is       => 'ro',
         isa      => 'Path::Class::File',
         lazy     => 1,
         default  => sub {
-            my $class = (shift)->meta->name;
-            Path::Class::File->new(
-                Class::Inspector->loaded_filename( $class )
-            )->parent->file(
-                (split /\:\:/ => $class)[-1] . '.' . $ext
+            my $self = shift;
+            $self->locate_class_file->parent->file(
+                 $self->local_class_name
+                 . '.'
+                 . $ext
             )
         }
     );
@@ -39,7 +37,8 @@ role {
 };
 
 sub copy {
-    my ($self, $to, $include_dependencies, $checksum) = validated_list(\@_,
+    my $self = shift;
+    my ($to, $include_dependencies, $checksum) = validated_list(\@_,
         to           => { isa => 'Path::Class::Dir', coerce => 1 },
         include_deps => { isa => 'Bool', optional => 1 },
         checksum     => { isa => 'Bool', optional => 1 },
@@ -60,11 +59,7 @@ sub copy {
             if $should_copy;
 
     if ( $include_dependencies ) {
-        $_->copy(
-            to           => $to,
-            include_deps => 1,
-            (defined $checksum ? (checksum => $checksum) : ()),
-        ) foreach $self->dependencies;
+        $_->copy( @_ ) foreach $self->dependencies;
     }
 }
 

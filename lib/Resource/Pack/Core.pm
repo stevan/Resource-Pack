@@ -1,10 +1,29 @@
 package Resource::Pack::Core;
 use Moose::Role;
 
+use Class::Inspector;
+use Path::Class ();
+
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 requires 'dependencies';
+
+sub fully_qualified_class_name { (shift)->meta->name }
+
+sub local_class_name {
+    my $self = shift;
+    ( split /\:\:/ => $self->fully_qualified_class_name )[-1]
+}
+
+sub locate_class_file {
+    my $self = shift;
+    Path::Class::File->new(
+        Class::Inspector->loaded_filename(
+            $self->fully_qualified_class_name
+        )
+    )
+}
 
 no Moose::Role; 1;
 
