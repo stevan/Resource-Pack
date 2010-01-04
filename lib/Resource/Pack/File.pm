@@ -2,9 +2,6 @@ package Resource::Pack::File;
 use MooseX::Role::Parameterized;
 use MooseX::Params::Validate;
 
-use Digest::MD5;
-use File::Copy ();
-
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
@@ -18,7 +15,8 @@ parameter 'extension' => (
 role {
     my $ext = (shift)->extension;
 
-    with 'Resource::Pack::Core';
+    with 'Resource::Pack::Core',
+         'Resource::Pack::Util::FileSys';
 
     has 'file' => (
         is       => 'ro',
@@ -39,27 +37,20 @@ role {
 
 sub copy {
     my $self = shift;
-    my ($to, $include_dependencies, $checksum) = validated_list(\@_,
+    my ($to, $include_dependencies) = validated_list(\@_,
         to           => { isa => 'Path::Class::Dir', coerce => 1 },
         include_deps => { isa => 'Bool', optional => 1 },
-        checksum     => { isa => 'Bool', optional => 1 },
     );
 
-    my $target = $to->file( $self->file->basename );
-
-    my $should_copy = 1;
-
-    if ($checksum && -e $target) {
-        $should_copy = 0
-            if Digest::MD5->new->addfile( $target->openr )->hexdigest
-            eq Digest::MD5->new->addfile( $self->file->openr )->hexdigest;
-    }
-
-    File::Copy::copy( $self->file->stringify, $target->stringify )
-        || confess "Could not copy " . $self->file->basename , " to $target because: $!"
-            if $should_copy;
+    $self->_copy_entity_recursively( $self->file, $to );
 
     if ( $include_dependencies ) {
+        # XXX
+        # should we check to make sure
+        # that it can('copy'). And then
+        # should we die if not? or ignore
+        # it and go to the next?
+        # - SL
         $_->copy( @_ ) foreach $self->dependencies;
     }
 }

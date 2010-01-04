@@ -29,13 +29,13 @@ my @targets = (
 # clear stuff out before we start the test
 -e $_ && $_->remove for @targets;
 
-ok(! -e $_,     '... the file (' . $_ . ') does not exist yet') for @targets;
+ok(! -e $_, '... the file (' . $_ . ') does not exist yet') for @targets;
 
 lives_ok {
     $pack->copy( to => $dest );
 } '... directory of resources was copied successfully';
 
-ok(-e $_,     '... the file (' . $_ . ') does exist now') for @targets;
+ok(-e $_, '... the file (' . $_ . ') does exist now') for @targets;
 
 $_->remove for @targets;
 

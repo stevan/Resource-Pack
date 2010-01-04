@@ -2,15 +2,13 @@ package Resource::Pack::Dir;
 use Moose::Role;
 use MooseX::Params::Validate;
 
-use Digest::MD5;
-use File::Copy ();
-
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use Resource::Pack::Types;
 
-with 'Resource::Pack::Core';
+with 'Resource::Pack::Core',
+     'Resource::Pack::Util::FileSys';
 
 has 'dir' => (
     is       => 'ro',
@@ -26,36 +24,20 @@ has 'dir' => (
 
 sub copy {
     my $self = shift;
-    my ($to, $include_dependencies, $checksum) = validated_list(\@_,
+    my ($to, $include_dependencies) = validated_list(\@_,
         to           => { isa => 'Path::Class::Dir', coerce => 1 },
         include_deps => { isa => 'Bool', optional => 1 },
-        checksum     => { isa => 'Bool', optional => 1 },
     );
 
-    foreach my $child ( $self->dir->children ) {
-        if (-d $child) {
-            # TODO:
-            # should we just copy the entire sub-directory?
-            # - SL
-        }
-        else {
-            my $target = $to->file( $child->basename );
-
-            my $should_copy = 1;
-
-            if ($checksum && -e $target) {
-                $should_copy = 0
-                    if Digest::MD5->new->addfile( $target->openr )->hexdigest
-                    eq Digest::MD5->new->addfile( $child->openr )->hexdigest;
-            }
-
-            File::Copy::copy( $child->stringify, $target->stringify  )
-                || confess "Could not copy " . $child , " to $target because: $!"
-                    if $should_copy;
-        }
-    }
+    $self->_copy_entity_recursively( $_, $to ) for $self->dir->children;
 
     if ( $include_dependencies ) {
+        # XXX
+        # should we check to make sure
+        # that it can('copy'). And then
+        # should we die if not? or ignore
+        # it and go to the next?
+        # - SL
         $_->copy( @_ ) foreach $self->dependencies;
     }
 }

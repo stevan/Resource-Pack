@@ -11,6 +11,4 @@ BEGIN {
     use_ok('Resource::Pack');
 }
 
-
-
 done_testing;
