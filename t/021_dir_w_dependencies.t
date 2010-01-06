@@ -26,13 +26,13 @@ my @targets = (
     $dest->file( 'test.css' )
 );
 my @dep_targets = (
-    $dest->file( 'other_test.js' ),
-    $dest->file( 'other_test.css' )
+    $dest->subdir('js')->file( 'other_test.js' ),
+    $dest->subdir('css')->file( 'other_test.css' )
 );
 
-
 # clear stuff out before we start the test
--e $_ && $_->remove for @targets, @dep_targets;
+-e $_ && $_->remove for @targets;
+-e $_ && $_->rmtree for $dest->subdir('js'), $dest->subdir('css');
 
 ok(! -e $_, '... the file (' . $_ . ') does not exist yet') for @targets, @dep_targets;
 
@@ -42,7 +42,8 @@ lives_ok {
 
 ok(-e $_, '... the file (' . $_ . ') does exist now') for @targets, @dep_targets;
 
-$_->remove for @targets, @dep_targets;
+$_->remove for @targets;
+$_->rmtree for $dest->subdir('js'), $dest->subdir('css');
 
 done_testing;
 

@@ -24,12 +24,15 @@ has 'dir' => (
 
 sub copy {
     my $self = shift;
-    my ($to, $include_dependencies) = validated_list(\@_,
+    my ($to, $include_dependencies, $preserve_dir) = validated_list(\@_,
         to           => { isa => 'Path::Class::Dir', coerce => 1 },
         include_deps => { isa => 'Bool', optional => 1 },
+        preserve_dir => { isa => 'Bool', optional => 1 },
     );
 
-    $self->_copy_entity_recursively( $_, $to ) for $self->dir->children;
+    my @to_copy = $preserve_dir ? $self->dir : $self->dir->children;
+
+    $self->_copy_entity_recursively( $_, $to ) for @to_copy;
 
     if ( $include_dependencies ) {
         # XXX
