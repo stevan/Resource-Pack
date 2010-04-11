@@ -11,16 +11,23 @@ our $AUTHORITY = 'cpan:STEVAN';
 use Resource::Pack::Types;
 
 parameter 'url' => (
-    isa     => 'Str',
-    default => 'txt'
+    isa      => 'Str',
+    required => 1
 );
 
+parameter 'sub_dir' => ( isa => 'Str' );
+
 role {
-    my $url = URI->new( (shift)->url );
+    my $param = shift;
+
+    my $url     = URI->new( $param->url );
+    my $sub_dir = $param->sub_dir;
 
     with 'Resource::Pack::Core';
 
-    method 'url' => sub { $url };
+    method 'url'         => sub { $url };
+    method 'has_sub_dir' => sub { defined $sub_dir ? 1 : 0 };
+    method 'sub_dir'     => sub { $sub_dir };
 };
 
 sub copy {
@@ -33,6 +40,9 @@ sub copy {
     my $response = LWP::UserAgent->new->get( $self->url->as_string );
 
     if ($response->is_success) {
+        if ($self->has_sub_dir) {
+            $to = $to->subdir( $self->sub_dir );
+        }
         my $fh = $to->file( ($self->url->path_segments)[-1] )->openw;
         $fh->print( $response->content );
         $fh->close;
