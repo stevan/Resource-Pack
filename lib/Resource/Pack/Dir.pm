@@ -61,11 +61,24 @@ Resource::Pack::Dir - A Moosey solution to this problem
 
 =head1 DESCRIPTION
 
+This is a role which tells Resource::Pack to look in the directory
+which matches the full class name. This means that given the
+class namespace B<Foo::Bar::Baz.pm> it will look in the directory
+F<Foo/Bar/Baz/*> for the resources.
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item B<dir>
+
+=back
+
 =head1 METHODS
 
 =over 4
 
-=item B<>
+=item B<copy( to => $dir, ?include_deps => 1|0, ?preserve_dir => 1|0 )>
 
 =back
 

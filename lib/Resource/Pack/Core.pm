@@ -47,7 +47,7 @@ __END__
 
 =head1 NAME
 
-Resource::Pack::Core - A Moosey solution to this problem
+Resource::Pack::Core
 
 =head1 SYNOPSIS
 
@@ -55,11 +55,27 @@ Resource::Pack::Core - A Moosey solution to this problem
 
 =head1 DESCRIPTION
 
-=head1 METHODS
+This is a core role which provides some useful attributes to
+make it easy to access the files and directories associated
+with the class that consumes this role.
+
+=head1 REQUIRED METHODS
 
 =over 4
 
-=item B<>
+=item B<dependencies>
+
+=back
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item B<fully_qualified_class_name>
+
+=item B<local_class_name>
+
+=item B<class_file>
 
 =back
 

@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-Resource::Pack::File - A Moosey solution to this problem
+Resource::Pack::File
 
 =head1 SYNOPSIS
 
@@ -71,11 +71,34 @@ Resource::Pack::File - A Moosey solution to this problem
 
 =head1 DESCRIPTION
 
+This is parameterized role that can be passed the
+extension of the file it should look for.
+
+=head1 ROLE PARAMETERS
+
+=over 4
+
+=item B<extension>
+
+Defaults to C<txt>.
+
+=back
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item B<file>
+
+=back
+
 =head1 METHODS
 
 =over 4
 
-=item B<>
+=item B<extension>
+
+=item B<copy( to => $dir, ?include_deps => 1|0, )>
 
 =back
 

@@ -71,19 +71,38 @@ __END__
 
 =head1 NAME
 
-Resource::Pack::File - A Moosey solution to this problem
+Resource::Pack::URL
 
 =head1 SYNOPSIS
 
-  use Resource::Pack::File;
+  use Resource::Pack::URL;
 
 =head1 DESCRIPTION
+
+This is a parameterized role which can be used to specify a
+resource that is out on the internet.
+
+=head1 ROLE PARAMETERS
+
+=over 4
+
+=item B<url>
+
+=item B<sub_dir>
+
+=back
 
 =head1 METHODS
 
 =over 4
 
-=item B<>
+=item B<url>
+
+=item B<has_sub_dir>
+
+=item B<sub_dir>
+
+=item B<copy( to => $dir, ?include_deps => 1|0, )>
 
 =back
 

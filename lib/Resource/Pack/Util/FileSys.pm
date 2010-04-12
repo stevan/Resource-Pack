@@ -27,7 +27,7 @@ __END__
 
 =head1 NAME
 
-Resource::Pack::Util::FileSys - A Moosey solution to this problem
+Resource::Pack::Util::FileSys
 
 =head1 SYNOPSIS
 
@@ -35,13 +35,9 @@ Resource::Pack::Util::FileSys - A Moosey solution to this problem
 
 =head1 DESCRIPTION
 
-=head1 METHODS
-
-=over 4
-
-=item B<>
-
-=back
+This a role used internally by L<Resource::Pack::File> and
+L<Resource::Pack::Dir> and it provides some basic file system
+utilities.
 
 =head1 BUGS
 

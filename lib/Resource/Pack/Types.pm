@@ -24,9 +24,7 @@ __END__
 
 =head1 NAME
 
-=head1 SYNOPSIS
-
-=head1 DESCRIPTION
+Resource::Pack::Types - The type library for Resource::Pack;
 
 =head1 BUGS
 
