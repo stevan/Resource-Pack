@@ -15,6 +15,8 @@ requires 'Class::Inspector'            => 1.24;
 requires 'Path::Class'                 => 0.18;
 requires 'MooseX::Types::Path::Class'  => 0.05;
 requires 'File::Copy::Recursive'       => 0.38;
+requires 'LWP::UserAgent'              => 0;
+requires 'URI'                         => 0;
 
 # things the tests need
 build_requires 'Test::More'      => '0.62';
