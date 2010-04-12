@@ -23,6 +23,8 @@ This module requires these other modules and libraries:
   Path::Class
   MooseX::Types::Path::Class
   File::Copy::Recursive
+  LWP::UserAgent
+  URI
 
 COPYRIGHT AND LICENCE
 

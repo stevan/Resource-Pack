@@ -8,13 +8,13 @@ all_from 'lib/Resource/Pack.pm';
 license 'perl';
 
 # prereqs
-requires 'Moose'                       => 0.93;
-requires 'MooseX::Params::Validate'    => 0.13;
-requires 'MooseX::Role::Parameterized' => 0.14;
+requires 'Moose'                       => 1.01;
+requires 'MooseX::Params::Validate'    => 0.14;
+requires 'MooseX::Role::Parameterized' => 0.18;
 requires 'Class::Inspector'            => 1.24;
-requires 'Path::Class'                 => 0.18;
 requires 'MooseX::Types::Path::Class'  => 0.05;
 requires 'File::Copy::Recursive'       => 0.38;
+requires 'Path::Class'                 => 0;
 requires 'LWP::UserAgent'              => 0;
 requires 'URI'                         => 0;
 
