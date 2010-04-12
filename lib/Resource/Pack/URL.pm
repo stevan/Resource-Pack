@@ -42,6 +42,7 @@ sub copy {
     if ($response->is_success) {
         if ($self->has_sub_dir) {
             $to = $to->subdir( $self->sub_dir );
+            $to->mkpath unless -e $to;
         }
         my $fh = $to->file( ($self->url->path_segments)[-1] )->openw;
         $fh->print( $response->content );
