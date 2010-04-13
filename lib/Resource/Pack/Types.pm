@@ -7,11 +7,7 @@ our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 subtype 'Resource::Pack::Dependencies'
-    => as 'ArrayRef[ Resource::Pack ]';
-
-coerce 'Resource::Pack::Dependencies'
-    => from 'ArrayRef[ Str | ClassName ]'
-       => via { [ map { Class::MOP::load_class( $_ ); $_->new } @$_ ] };
+    => as 'ArrayRef[ Str | ClassName ]';
 
 subtype 'Resource::Pack::Traits'
     => as 'ArrayRef[ Str | RoleName | HashRef ]';

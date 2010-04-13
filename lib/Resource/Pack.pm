@@ -8,7 +8,6 @@ use Resource::Pack::Types;
 
 parameter 'depends_on' => (
     isa     => 'Resource::Pack::Dependencies',
-    coerce  => 1,
     default => sub { [] }
 );
 
@@ -20,7 +19,7 @@ parameter 'traits' => (
 role {
     my $p      = shift;
     my $traits = $p->traits;
-    my $deps   = $p->depends_on;
+    my $deps   = [ map { Class::MOP::load_class( $_ ); $_->new } @{ $p->depends_on } ];
 
     # make these constant methods since they won't change
     method 'dependencies'   => sub { @$deps   };
